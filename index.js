@@ -24,6 +24,7 @@ app.use('/api/empresas', require('./routes/empresa.routers'));
 app.use('/api/empleados', require('./routes/empleado.routers'));
 app.use('/api/informes', require('./routes/informe.routers'));
 app.use('/api/sucursales', require('./routes/sucursal.routers'));
+app.use('/api/logins', require('./routes/login.routers'));
 //Para levantar el servidor
 app.listen(process.env.PORT, ()=>{
     console.log('Servidor corriendo en el puerto ' + process.env.PORT)

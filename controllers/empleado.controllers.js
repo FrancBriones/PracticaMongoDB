@@ -1,6 +1,6 @@
 const { response } = require('express');
 const Empleado = require('../models/empleado.models');
-
+const bcrypt = require('bcryptjs');
 //Obtener los empleados
 const getEmpleado = async (req, res)=>{
     const desde = Number(req.query.desde) || 0;
@@ -23,24 +23,24 @@ const getEmpleado = async (req, res)=>{
 }
 //Crear los empleados
 const crearEmpleado = async(req, res=response)=>{
-
-    const uid = req.uid;
-    const uid1 = req.uid1;
-    const cdi= req.cdi;
-
-    const empleado = new Empleado({ 
-        empresa: uid1,
-        area: uid,
-        cargo: cdi,
-        ...req.body 
-    });
-
+    const {email,password} = req.body;
     try {
-        const empleadoDB = await empleado.save();
+        const existeEmail = await Empleado.findOne({email});
+        if(existeEmail){
+            return res.status(400).json({
+                ok:false,
+                msg: 'El email ya ha sido registrado'
+            });
+        }
+        const empleado = new Empleado(req.body);
+        // Encriptar contraseña
+        const salt = bcrypt.genSaltSync();
+        empleado.password = bcrypt.hashSync(password, salt);
+         await empleado.save();
         
         res.json({
             ok: true,
-            empleado: empleadoDB
+            empleado
         });
 
     } catch (error) {

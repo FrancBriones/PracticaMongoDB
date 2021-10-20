@@ -9,11 +9,15 @@ const EmpleadoSchema = Schema({
     apellido:{
         type:String,
         requerid:true,
-        unique:true
     },
     email:{
         type:String,
-        requerid:false
+        requerid:true,
+        unique:true
+    },
+    password:{
+        type: String,
+        required: true
     },
     direccion:{
         type:String,
